@@ -23,7 +23,7 @@ def info_proj_L(p: np.ndarray, A: np.ndarray, u: np.ndarray) -> np.ndarray:
     """
     m = p.shape[0]
     proj = np.zeros(m)
-    
+
     for j in range(m):
         # Find row of A that has j in it's support
         for row in A:
@@ -46,24 +46,25 @@ def IPS(A: list[np.ndarray], u: np.ndarray) -> np.ndarray:
     Returns:
         The MLE, p* distribution, of the statistical model associated to A.
     """
-    k = len(A) # Number of partitions
-    m = u.shape[0] # Distribution p* lives in the m-1 simplex
-    l = 0 # Current iteration
-    p_prev = np.full(m, 1/m, dtype=float) # p^0
+    k = len(A)  # Number of partitions
+    m = u.shape[0]  # Distribution p* lives in the m-1 simplex
+    l = 0  # Current iteration
+    p_prev = np.full(m, 1/m, dtype=float)  # p^0
     p = np.zeros(m)
-    
-    MAX_ITER = 5
+
+    MAX_STEPS = 100
     CONVERGENCE_TOL = 1e-12
-    while l < MAX_ITER:
-        p = info_proj_L(p_prev, A[(l-1) % k], u)
+    while l < MAX_STEPS:
+        partition_idx = l % k
+        p = info_proj_L(p_prev, A[partition_idx], u)
 
         if np.max(np.abs(p - p_prev)) < CONVERGENCE_TOL:
-            print(f"{GREEN}Converged in {l} iterations!{RESET}")
+            print(f"{GREEN}Converged in {l} steps!{RESET}")
             return p
 
-        l += 1
-        print(f"{YELLOW}Iteration {l} produced {p} using A^{(l-1) % k + 1}{RESET}")
+        print(f"{YELLOW}Step {l} produced {p} using A^{partition_idx + 1}{RESET}")
         p_prev = p.copy()
+        l += 1
     else:
-        print(f"{RED}Could not converge in {l} iterations!{RESET}")
+        print(f"{RED}Could not converge in {l} steps!{RESET}")
     return p

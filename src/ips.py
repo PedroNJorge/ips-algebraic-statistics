@@ -1,11 +1,5 @@
 import numpy as np
-
-
-# ANSI color codes for printing text
-RED = '\033[91m'
-GREEN = '\033[92m'
-YELLOW = '\033[93m'
-RESET = '\033[0m'
+from .colors import RED, GREEN, YELLOW, RESET
 
 
 def info_proj_L(p: np.ndarray, A: np.ndarray, u: np.ndarray) -> np.ndarray:

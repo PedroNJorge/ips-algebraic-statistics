@@ -53,12 +53,12 @@ def IPS(A: list[np.ndarray], u: np.ndarray) -> np.ndarray:
         p = info_proj_L(p_prev, A[partition_idx], u)
 
         if np.max(np.abs(p - p_prev)) < CONVERGENCE_TOL:
-            print(f"{GREEN}Converged in {l} steps!{RESET}")
+            print(f"[IPS] {GREEN}Converged in {l} steps!{RESET}")
             return p
 
-        print(f"{YELLOW}Step {l} produced {p} using A^{partition_idx + 1}{RESET}")
+        print(f"[IPS] {YELLOW}Step {l+1} produced {p} using A^{partition_idx + 1}{RESET}")
         p_prev = p.copy()
         l += 1
     else:
-        print(f"{RED}Could not converge in {l} steps!{RESET}")
+        print(f"[IPS] {RED}Could not converge in {l} steps!{RESET}")
     return p
